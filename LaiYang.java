@@ -4,6 +4,7 @@ public class LaiYang {
 	boolean recorded;
 	ArrayList<String> counter;
 	LinkedList State;
+	String controlmessage;
 	public void ReadMessage(String s, boolean b)
 	{
 		if(b)
@@ -14,10 +15,18 @@ public class LaiYang {
 		{
 			//State(channel...) <- add message s
 			
-			/*if(state[c].total + 1 = counter[]
+			/*if(state[c].total + 1 = counter[channel]
 			 * {
-			 * 	state[].terminate
-			 * 
+			 * 	Terminate
+			 * }
+			 */
+		}
+		if(s == controlMesage)
+		{
+			TakeSnapshot();
+			/*if (State.messagecount == counter(p))
+			 * {
+			 * 	Terminate
 			 * }
 			 */
 		}
@@ -32,9 +41,13 @@ public class LaiYang {
 				//counter.add(channel, counter.get(channel) + 1);
 			}
 	}
-	public void SendMessage()
+	public void SendMessage(String m, boolean recorded)
 	{
-		
+		//send(m,recorded)
+		if(!recorded)
+		{
+			//counter.add(channel, counter.get(channel) + 1);
+		}
 	}
 	public void TakeSnapshot(/*Message*/)
 	{
@@ -43,6 +56,7 @@ public class LaiYang {
 			recorded = true;
 			SendMessage();
 			//record a snapshot of the state here
+			// This should be written to a txt file
 		}
 	}
 }

@@ -16,7 +16,7 @@ public class UDPServer2 implements Runnable{
 	List<String> State = new ArrayList<String>();
 	    try{
 	    	aSocket = new DatagramSocket(6789);
-		byte[] buffer = new byte[1000];
+		byte[] buffer = new byte[1500];
  		while(true){
  		    DatagramPacket request = new DatagramPacket(buffer, buffer.length);
   		   aSocket.receive(request);
@@ -42,8 +42,6 @@ public class UDPServer2 implements Runnable{
   			   fin.add(num);
   			   State.add("Start Connection: ");
   		   }
-  		   
-  		 System.out.print(num + new String(request.getData()) + "   ");
   		int t = client.indexOf(request.getSocketAddress().toString());
   		if(serverSnap)
   		{
@@ -73,7 +71,6 @@ public class UDPServer2 implements Runnable{
   		{
   			State.set(t, State.get(t) + new String(request.getData()) + " / ");
   			total.set(t, num);
-  			System.out.println("test");
   			if(client.isEmpty())
   			{
   				recorded = false;
@@ -102,6 +99,8 @@ public class UDPServer2 implements Runnable{
   				recorded = false;
   				//break;
   			}
+  			aSocket.receive(request);
+  			writeFile(request);
   			System.out.println("a connection has been terminated");
   		 }
 		   DatagramPacket reply = new DatagramPacket(request.getData(), 
@@ -117,11 +116,18 @@ public class UDPServer2 implements Runnable{
 	public void run() {
 		UDPServer2.main(null);
 	}
+	public static void writeFile(DatagramPacket dp) throws FileNotFoundException, UnsupportedEncodingException
+	{
+		Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("M-E-d-HH:mm:ss:SSS");
+		PrintWriter writer = new PrintWriter(sdf.format(cal.getTime()) + ".dat", "UTF-8");
+		writer.println(new String(dp.getData()));
+		writer.close();
+	}
 	public static void takeSnapshot(ArrayList client, ArrayList num, List messages) throws FileNotFoundException, UnsupportedEncodingException
 	{
 		Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("M-E-d-HH:mm:ss:SSS");
-        System.out.println( sdf.format(cal.getTime()) );
 		PrintWriter writer = new PrintWriter(sdf.format(cal.getTime()) + ".dat", "UTF-8");
 		for (int i = 0; i < client.size(); i++)
 		{
